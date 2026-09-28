@@ -2,8 +2,11 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "刻龙智能硬件🐲",
+  title: "刻龙智能硬件",
   description: "AI智能硬件 开源硬件",
+  head: [
+    ['link', { rel: 'icon', href: '/Clone-OpenSoure-HardWare/icons/favicon.ico' }]
+  ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: "/icons/logo2.png",

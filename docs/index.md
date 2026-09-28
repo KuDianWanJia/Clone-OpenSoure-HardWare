@@ -7,7 +7,7 @@ hero:
   text: "音视频 AI 智能硬件🤖"
   tagline: "致力于打造开源、易复刻的智能硬件\r\n音视频与 AI 相结合的开源智能硬件方案\r\n拥有配套且完善的 SDK 及软硬件开发资料~"
   image:
-    src: /icons/logo.png
+    src: /icons/logo1.png
     alt: VitePress
   actions:
     - theme: brand
