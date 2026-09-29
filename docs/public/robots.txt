@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kudianwanjia.github.io/Clone-OpenSoure-HardWare/sitemap.xml

@@ -1,12 +1,64 @@
 import { defineConfig } from 'vitepress'
 
+const HOST = 'https://kudianwanjia.github.io'
+const BASE = '/Clone-OpenSoure-HardWare/'
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "刻龙智能硬件",
+  title: "刻龙开源智能硬件",
   description: "AI智能硬件 开源硬件",
+  // 启用最后更新时间 → sitemap 的 lastmod
+  lastUpdated: true,
+  // 内置 sitemap
+  sitemap: {
+    hostname: 'https://kudianwanjia.github.io',
+    lastmod: 'date'
+  },
   head: [
-    ['link', { rel: 'icon', href: '/Clone-OpenSoure-HardWare/icons/favicon.ico' }]
+    ['link', { rel: 'icon', href: '/Clone-OpenSoure-HardWare/icons/favicon.ico' }],
+
+    // 基础 SEO(搜索引擎看的网页简介)
+    ['meta', { name: 'description', content: '刻龙开源智能硬件 — 刻龙开源硬件社区，致力于音视频AI智能硬件。' }],
+    ['meta', { name: 'keywords', content: '刻龙开源智能硬件, 开源硬件, AI智能硬件, Clone Board, RV1106, RV1106B, SSC305, SSC308, 音视频开发套件' }],
+    ['meta', { name: 'author', content: 'KuDianWanJia' }],
+    ['meta', { name: 'robots', content: 'index, follow' }],
+    // Open Graph(网页分享到社交平台时能显示成统一的"卡片样式"\国内基本用这个)
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:site_name', content: '刻龙开源智能硬件' }],
+    ['meta', { property: 'og:image', content: `${HOST}${BASE}icons/logo2.png` }],
+    ['meta', { property: 'og:locale', content: 'zh_CN' }],
+    // 组织实体标记（让百度/必应知道“刻龙开源硬件”=这个站）
+    ['script', { type: 'application/ld+json' }, JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: '刻龙开源智能硬件',
+      alternateName: ['刻龙开源智能硬件', 'KuDianWanJia', '酷电玩家'],
+      url: `${HOST}${BASE}`,
+      logo: `${HOST}${BASE}icons/logo2.png`,
+      description: '音视频 AI 智能硬件开源社区',
+      sameAs: [
+        'https://github.com/KuDianWanJia',
+        'https://gitee.com/KuDianWanJia',
+        'https://space.bilibili.com/390456922',
+        'https://oshwhub.com/PQG2030PQG',
+        'https://clone-board.taobao.com/'
+      ]
+    })]
   ],
+  // 每页动态注入 canonical + og:url + og:title + og:description(给每个页面自动注入SEO和社交分享相关的<head>标签)
+  transformPageData(pageData) {
+    const url = `${HOST}${BASE}${pageData.relativePath}`
+      .replace(/\.md$/, '')
+      .replace(/\/index$/, '/')
+
+    pageData.frontmatter.head ??= []
+    pageData.frontmatter.head.push(
+      ['link', { rel: 'canonical', href: url }],
+      ['meta', { property: 'og:url', content: url }],
+      ['meta', { property: 'og:title', content: `${pageData.title} | 刻龙开源智能硬件` }],
+      ['meta', { property: 'og:description', content: pageData.description || 'AI智能硬件 开源硬件' }],
+    )
+  },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: "/icons/logo2.png",
@@ -38,7 +90,7 @@ export default defineConfig({
           },
         ],
       },
-      { text: '交流💬', link: '/docs/iscuss.md' },
+      { text: '技术交流💬', link: '/docs/iscuss.md' },
       { text: '💰', link: '/docs/donate.md' },
     ],
 
