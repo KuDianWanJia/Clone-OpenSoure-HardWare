@@ -27,6 +27,8 @@ export default defineConfig({
     ['meta', { property: 'og:site_name', content: '刻龙开源智能硬件' }],
     ['meta', { property: 'og:image', content: `${HOST}${BASE}icons/logo2.png` }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
+    // Bing 添加并验证网站
+    ['meta', { name: 'msvalidate.01', content: '965FD9EC6D1446385E5C95766701EFCC' }],
     // 组织实体标记（让百度/必应知道“刻龙开源硬件”=这个站）
     ['script', { type: 'application/ld+json' }, JSON.stringify({
       '@context': 'https://schema.org',
