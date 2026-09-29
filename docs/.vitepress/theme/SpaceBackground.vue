@@ -95,7 +95,7 @@ const starDots = Array.from({ length: 60 }).map((_, i) => ({
   height: 120px;
   top: 15%;
   left: 8%;
-  background: radial-gradient(circle at 30% 30%, #bd34fe, #6a0dad, #1a0033);
+  background: radial-gradient(circle at 30% 30%, #8d1ac2, #6a0dad, #1a0033);
   box-shadow:
     0 0 40px rgba(189, 52, 254, 0.4),
     inset -10px -10px 30px rgba(0, 0, 0, 0.5);
@@ -108,7 +108,7 @@ const starDots = Array.from({ length: 60 }).map((_, i) => ({
   height: 60px;
   top: 60%;
   right: 15%;
-  background: radial-gradient(circle at 30% 30%, #41d1ff, #1e6fa8, #0a2a40);
+  background: radial-gradient(circle at 30% 30%, #09a4b9, #1e6fa8, #0a2a40);
   box-shadow:
     0 0 25px rgba(65, 209, 255, 0.3),
     inset -8px -8px 20px rgba(0, 0, 0, 0.5);
@@ -119,9 +119,9 @@ const starDots = Array.from({ length: 60 }).map((_, i) => ({
 .planet-3 {
   width: 30px;
   height: 30px;
-  top: 35%;
+  top: 45%;
   right: 50%;
-  background: radial-gradient(circle at 30% 30%, #38f9d7, #1aa37a, #0a3d2e);
+  background: radial-gradient(circle at 30% 30%, #07968f, #1aa37a, #0a3d2e);
   box-shadow:
     0 0 15px rgba(56, 249, 215, 0.3),
     inset -5px -5px 10px rgba(0, 0, 0, 0.5);
