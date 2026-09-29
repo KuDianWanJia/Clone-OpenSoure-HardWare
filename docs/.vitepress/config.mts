@@ -61,12 +61,19 @@ export default defineConfig({
       ['meta', { property: 'og:description', content: pageData.description || 'AI智能硬件 开源硬件' }],
     )
   },
+  appearance: 'dark',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: "/icons/logo2.png",
     nav: [
       { text: '首页📒', link: '/' },
-      { text: '官方店铺🛒', link: 'https://clone-board.taobao.com/' },
+      { text: '官方店铺🛒',
+        items: [
+          {
+            text: '官方店铺🛒', link: 'https://clone-board.taobao.com/'
+          }
+        ]
+      },
       {
         text: '硬件选型🐣',
         items: [
@@ -92,8 +99,20 @@ export default defineConfig({
           },
         ],
       },
-      { text: '技术交流💬', link: '/docs/iscuss.md' },
-      { text: '💰', link: '/docs/donate.md' },
+      { text: '技术交流💬',
+        items: [
+          {
+            text: '技术交流💬', link: '/docs/iscuss.md'
+          }
+        ]
+      },
+      { text: '💰',
+        items: [
+          {
+            text: '支持我们', link: '/docs/donate.md'
+          }
+        ]
+      },
     ],
 
     sidebar: {
