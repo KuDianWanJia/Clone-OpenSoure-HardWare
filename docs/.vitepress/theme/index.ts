@@ -1,5 +1,6 @@
 // https://vitepress.dev/guide/custom-theme
 import { h } from 'vue'
+import { useData } from 'vitepress'
 import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import MeteorRain from './MeteorRain.vue'
@@ -10,10 +11,14 @@ import './style.css'
 export default {
   extends: DefaultTheme,
   Layout: () => {
+    const { isDark } = useData()
+
     return h(DefaultTheme.Layout, null, {
       // https://vitepress.dev/guide/extending-default-theme#layout-slots
       // 把流星雨插到首页 Hero 区域最前面
-      'home-hero-before': () => [h(SpaceBackground), h(MeteorRain), h(Astronaut)]
+      'home-hero-before': () => isDark.value
+        ? [h(SpaceBackground), h(MeteorRain), h(Astronaut)]
+        : null
     })
   },
   enhanceApp({ app, router, siteData }) {
