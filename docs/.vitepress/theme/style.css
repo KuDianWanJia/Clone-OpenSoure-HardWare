@@ -92,29 +92,81 @@
 
 :root {
   --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: -webkit-linear-gradient(
-    120deg,
-    #bd34fe 30%,
-    #41d1ff
-  );
-
-  --vp-home-hero-image-background-image: linear-gradient(
-    -45deg,
-    #bd34fe 50%,
-    #47caff 50%
-  );
-  --vp-home-hero-image-filter: blur(44px);
 }
 
+/* Hero 名字流动渐变 */
+.VPHero .name .clip,
+.VPHero .name {
+  background-image: linear-gradient(
+    120deg,
+    #bd34fe,
+    #41d1ff,
+    #bd34fe
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: hero-gradient-flow 4s linear infinite;
+}
+
+/* Hero 图片光晕流动渐变 */
+.VPHero .image-bg {
+  background-image: linear-gradient(
+    -45deg,
+    #bd34fe,
+    #47caff,
+    #bd34fe
+  );
+  background-size: 300% 300%;
+  animation: hero-image-flow 6s ease-in-out infinite;
+  filter: blur(44px);
+}
+
+/* 名字流动动画 */
+@keyframes hero-gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* 图片光晕流动动画 */
+@keyframes hero-image-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 响应式模糊（保留你原来的断点） */
 @media (min-width: 640px) {
-  :root {
-    --vp-home-hero-image-filter: blur(56px);
+  .VPHero .image-bg {
+    filter: blur(56px);
   }
 }
 
 @media (min-width: 960px) {
-  :root {
-    --vp-home-hero-image-filter: blur(68px);
+  .VPHero .image-bg {
+    filter: blur(68px);
+  }
+}
+
+/* 无障碍：减少动画 */
+@media (prefers-reduced-motion: reduce) {
+  .VPHero .name .clip,
+  .VPHero .name,
+  .VPHero .image-bg {
+    animation: none;
+    background-position: 0% 50%;
   }
 }
 
@@ -137,3 +189,25 @@
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
 
+/* ===== 首页流星雨定位修正 ===== */
+
+/* 让首页成为定位容器 */
+.VPHome {
+  position: relative;
+  isolation: isolate;
+}
+
+/* 确保流星雨在最底层 */
+.meteor-rain {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Hero 内容必须高于流星雨 */
+.VPHero {
+  position: relative;
+  z-index: 1;
+}
