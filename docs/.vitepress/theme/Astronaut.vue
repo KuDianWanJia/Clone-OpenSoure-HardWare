@@ -2,6 +2,7 @@
   <div class="astronaut-wrap" aria-hidden="true">
     <img
       class="astronaut"
+      :class="{ 'is-ready': isReady }"
       src="/icons/Astronauts.png"
       :style="astronautStyle"
       alt=""
@@ -10,14 +11,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+
+// 初始别写 0,0，先给个屏幕内位置，避免 SSR 第一帧在左上角
+const startX = typeof window !== 'undefined' ? window.innerWidth * 0.2 : 200
+const startY = typeof window !== 'undefined' ? window.innerHeight * 0.25 : 200
 
 const astronautStyle = ref({
-  transform: 'translate(0px, 0px) rotate(0deg)',
+  transform: `translate(${startX}px, ${startY}px) rotate(0deg)`,
 })
 
-let x = 200
-let y = 200
+const isReady = ref(false)
+
+let x = startX
+let y = startY
 let vx = 0.5
 let vy = 0.3
 let angle = 0
@@ -41,6 +48,14 @@ function initWaypoints() {
     waypoints.push(generateWaypoint())
   }
   currentWaypointIndex = 0
+  // 起点直接锁到第一个航点，第一帧就在正确位置
+  x = waypoints[0].x
+  y = waypoints[0].y
+  const next = waypoints[1] || waypoints[0]
+  angle = Math.atan2(next.y - y, next.x - x) * (180 / Math.PI) + 90
+  astronautStyle.value = {
+    transform: `translate(${x}px, ${y}px) rotate(${angle}deg)`,
+  }
 }
 
 let animFrame = null
@@ -107,10 +122,10 @@ function animate() {
   animFrame = requestAnimationFrame(animate)
 }
 
-onMounted(() => {
-  initWaypoints()
-  x = waypoints[0].x
-  y = waypoints[0].y
+onMounted(async () => {
+  await nextTick()
+  initWaypoints()        // 先把位置算好设到航点1
+  isReady.value = true   // 再显示图片
   animate()
 })
 
@@ -138,6 +153,12 @@ onUnmounted(() => {
   filter: drop-shadow(0 0 12px rgba(65, 209, 255, 0.5));
   will-change: transform;
   transform-origin: center center;
+  /* 关键：没 ready 前不显示，彻底防左上角闪 */
+  visibility: hidden;
+}
+
+.astronaut.is-ready {
+  visibility: visible;
 }
 
 @media (max-width: 768px) {
