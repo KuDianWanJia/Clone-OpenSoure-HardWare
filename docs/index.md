@@ -1,6 +1,7 @@
 ---
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
+title: 音视频 AI 智能硬件 | Clone Board
 
 hero:
   name: "CloneBoard 刻龙硬件"
