@@ -34,12 +34,13 @@ const starDots = Array.from({ length: 60 }).map((_, i) => ({
 <style scoped>
 /* ===== 容器 ===== */
 .space-bg {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
   background: #0a0a1a;
+  contain: layout paint;  /* 新增：限制渲染层，不干扰其他页面 */
 }
 
 /* ===== 星云 ===== */

@@ -1,6 +1,6 @@
 // https://vitepress.dev/guide/custom-theme
 import { h } from 'vue'
-import { useData } from 'vitepress'
+import { ClientOnly } from 'vitepress'
 import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import MeteorRain from './MeteorRain.vue'
@@ -17,30 +17,31 @@ import './style.css'
 export default {
   extends: DefaultTheme,
   Layout: () => {
-    const { isDark } = useData()
-
     return h(DefaultTheme.Layout, null, {
       // https://vitepress.dev/guide/extending-default-theme#layout-slots
       // 把流星雨插到首页 Hero 区域最前面
-      'home-hero-before': () => isDark.value
-        ? [h(MeteorRain), h(SpaceBackground), h(Astronaut)]
-        : null,
+      // 用 ClientOnly 包裹：SSR 与首次 hydration 都渲染 null，避免暗色 SSR HTML
+      // 与亮色客户端渲染结构不一致导致 hydration mismatch（刷新后站内跳转白屏）。
+      // 显隐仍由 style.css 中 html.dark .space-layer 控制。
+      'home-hero-before': () => h(ClientOnly, null, {
+        default: () => [h(MeteorRain), h(SpaceBackground), h(Astronaut)]
+      }),
       // 文档页左侧导航栏
-      'sidebar-nav-before': () => isDark.value
-        ? [h(Astronaut)]
-        : null,
+      'sidebar-nav-before': () => h(ClientOnly, null, {
+        default: () => [h(Astronaut)]
+      }),
       // 文档页正文 Markdown 渲染内容
-      'doc-before': () => isDark.value
-        ? [h(Astronaut)]
-        : null,
+      'doc-before': () => h(ClientOnly, null, {
+        default: () => [h(Astronaut)]
+      }),
       // 文档页右侧“目录/大纲”
-      'aside-outline-before': () => isDark.value
-        ? [h(Astronaut)]
-        : null,
+      'aside-outline-before': () => h(ClientOnly, null, {
+        default: () => [h(Astronaut)]
+      }),
       // NotFound
-      'not-found': () => isDark.value
-        ? [h(NotFoundDino)]
-        : [h(NotFoundSnake)],
+      'not-found': () => h(ClientOnly, null, {
+        default: () => [h(NotFoundDino)]
+      }),
     })
   },
   enhanceApp({ app, router, siteData }) {

@@ -11,7 +11,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { useData } from 'vitepress'
+
+const { isDark } = useData()
 
 // 初始别写 0,0，先给个屏幕内位置，避免 SSR 第一帧在左上角
 const startX = typeof window !== 'undefined' ? window.innerWidth * 0.2 : 200
@@ -28,7 +31,7 @@ let y = startY
 let vx = 0.5
 let vy = 0.3
 let angle = 0
-
+let destroyed = false
 let waypoints = []
 let currentWaypointIndex = 0
 
@@ -61,6 +64,12 @@ function initWaypoints() {
 let animFrame = null
 
 function animate() {
+  if (destroyed) return
+  // 亮色模式下组件被 CSS 隐藏，停止动画循环，避免空转
+  if (!isDark.value) {
+    animFrame = null
+    return
+  }
   const wp = waypoints[currentWaypointIndex]
 
   const dx = wp.x - x
@@ -123,24 +132,35 @@ function animate() {
 }
 
 onMounted(async () => {
+  destroyed = false
   await nextTick()
   initWaypoints()        // 先把位置算好设到航点1
   isReady.value = true   // 再显示图片
   animate()
 })
 
+// 亮色 → 暗色切换时恢复动画循环
+watch(isDark, (dark) => {
+  if (dark && !destroyed && animFrame === null && isReady.value) {
+    animate()
+  }
+})
+
 onUnmounted(() => {
+  destroyed = true
   cancelAnimationFrame(animFrame)
+  animFrame = null
 })
 </script>
 
 <style scoped>
 .astronaut-wrap {
-  position: fixed;
+  position: absolute;   /* 改了：原来是 fixed */
   inset: 0;
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+  contain: layout paint;  /* 新增：限制渲染层，不干扰其他页面 */
 }
 
 .astronaut {

@@ -29,6 +29,7 @@ const meteors = Array.from({ length: 18 }).map((_, i) => ({
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+  contain: layout paint;  /* 新增：限制渲染层，不干扰其他页面 */
 }
 
 .meteor {
