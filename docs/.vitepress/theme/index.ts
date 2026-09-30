@@ -8,6 +8,10 @@ import Astronaut from './Astronaut.vue'
 import SpaceBackground from './SpaceBackground.vue'
 import NotFoundDino from './NotFoundDino.vue'
 import NotFoundSnake from './NotFoundSnake.vue'
+import GameList from './GameList.vue'
+import DinoGame from './games/DinoGame.vue'
+import SnakeGame from './games/SnakeGame.vue'
+import TetrisGame from './games/TetrisGame.vue'
 import './style.css'
 
 export default {
@@ -45,5 +49,9 @@ export default {
     app.component('SpaceBackground', SpaceBackground)
     app.component('MeteorRain', MeteorRain)
     app.component('Astronaut', Astronaut)
+    app.component('GameList', GameList)
+    app.component('DinoGame', DinoGame)
+    app.component('SnakeGame', SnakeGame)
+    app.component('TetrisGame', TetrisGame)
   }
 } satisfies Theme

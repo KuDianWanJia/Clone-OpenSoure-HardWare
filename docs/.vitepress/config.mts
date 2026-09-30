@@ -66,8 +66,8 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     logo: "/icons/logo2.png",
     nav: [
-      { text: '首页📒', link: '/' },
-      { text: '官方店铺🛒',
+      { text: '首页 📒', link: '/' },
+      { text: '官方店铺 🛒',
         items: [
           {
             text: '官方店铺🛒', link: 'https://clone-board.taobao.com/'
@@ -75,7 +75,7 @@ export default defineConfig({
         ]
       },
       {
-        text: '硬件选型🐣',
+        text: '硬件选型 🐣',
         items: [
           {
             text: '文档合集📚',
@@ -99,17 +99,33 @@ export default defineConfig({
           },
         ],
       },
-      { text: '技术交流💬',
+      { text: '技术交流 💬',
         items: [
           {
             text: '技术交流💬', link: '/docs/iscuss.md'
           }
         ]
       },
-      { text: '💰',
+      { text: '支持我们 💰',
         items: [
           {
             text: '支持我们', link: '/docs/donate.md'
+          }
+        ]
+      },
+      { text: '摸鱼专区 🎮',
+        items: [
+          {
+            text: '小游戏🎮', link: '/games/index.md'
+          },
+          {
+            text: 'Chrome 小恐龙🦖', link: '/games/dino.md'
+          },
+          {
+            text: '贪吃蛇🐍', link: '/games/snake.md'
+          },
+          {
+            text: '俄罗斯方块🧱', link: '/games/tetris.md'
           }
         ]
       },
