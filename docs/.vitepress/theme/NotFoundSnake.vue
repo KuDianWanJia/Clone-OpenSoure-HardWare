@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, onBeforeUnmount, ref } from 'vue'
-import { useRouter, withBase } from 'vitepress'
+import { useRouter, withBase, inBrowser } from 'vitepress'
 
 const router = useRouter()
 const homePath = withBase('/')
@@ -11,17 +11,27 @@ function goHome() {
 
 const canvas = ref(null)
 const score = ref(0)
-const best = ref(Number(localStorage.getItem('vp-snake-best') || 0))
+const best = ref(0) // 不在 setup 读 localStorage
 const state = ref('idle') // idle | playing | over | paused
 
-let ctx, timer
+let ctx = null
+let timer = null
 let running = false
 const SIZE = 20
 const CELL = 20
 let snake, dir, nextDir, food, speed, eatPulse
 
+function readBest() {
+  if (!inBrowser) return 0
+  try { return Number(localStorage.getItem('vp-snake-best') || 0) } catch { return 0 }
+}
+function writeBest(v) {
+  if (!inBrowser) return
+  try { localStorage.setItem('vp-snake-best', String(v)) } catch {}
+}
+
 function getVar(n, f) {
-  if (typeof window === 'undefined') return f
+  if (!inBrowser) return f
   return getComputedStyle(document.documentElement).getPropertyValue(n).trim() || f
 }
 
@@ -32,7 +42,7 @@ function reset() {
     { x: 6, y: 10 }
   ]
   dir = { x: 1, y: 0 }
-  nextDir = dir
+  nextDir = { x: 1, y: 0 }
   speed = 110
   score.value = 0
   eatPulse = 0
@@ -78,7 +88,7 @@ function step() {
     eatPulse = 6
     if (score.value > best.value) {
       best.value = score.value
-      localStorage.setItem('vp-snake-best', String(best.value))
+      writeBest(best.value) // 客户端才写
     }
     if (speed > 55) speed -= 3
     placeFood()
@@ -95,6 +105,7 @@ function gameOver() {
 }
 
 function roundRect(x, y, w, h, r) {
+  if (!ctx) return
   ctx.beginPath()
   ctx.moveTo(x + r, y)
   ctx.arcTo(x + w, y, x + w, y + h, r)
@@ -106,6 +117,7 @@ function roundRect(x, y, w, h, r) {
 }
 
 function draw() {
+  if (!ctx) return
   const bg = getVar('--vp-c-bg', '#ffffff')
   const grid = getVar('--vp-c-divider', '#e2e8f0')
   const sub = getVar('--vp-c-text-2', '#64748b')
@@ -160,8 +172,8 @@ function onKey(e) {
   if (['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d',' '].includes(k)) e.preventDefault()
   if (k === 'r') { clearTimeout(timer); reset(); return }
   if (k === ' ') {
-    if (state.value === 'playing') { state.value = 'paused'; statusText() }
-    else if (state.value === 'paused') { state.value = 'playing'; statusText(); loop() }
+    if (state.value === 'playing') { state.value = 'paused' }
+    else if (state.value === 'paused') { state.value = 'playing'; loop() }
     return
   }
   if (state.value !== 'playing') start()
@@ -170,15 +182,19 @@ function onKey(e) {
   if (k === 'arrowleft' || k === 'a') { if (dir.x !== 1) nextDir = { x:-1, y:0 } }
   if (k === 'arrowright' || k === 'd') { if (dir.x !== -1) nextDir = { x:1, y:0 } }
 }
-function statusText(){ /* 状态由浮层控制，无需额外文本 */ }
 
-function onPointer() { if (state.value !== 'playing') start() }
+function onPointer() {
+  if (state.value !== 'playing') start()
+}
 
 onMounted(() => {
+  if (!canvas.value) return
   ctx = canvas.value.getContext('2d')
+  best.value = readBest() // 挂载后读
   reset()
   window.addEventListener('keydown', onKey)
 })
+
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKey)
   clearTimeout(timer)

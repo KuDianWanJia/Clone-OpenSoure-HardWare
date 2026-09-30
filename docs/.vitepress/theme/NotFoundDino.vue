@@ -1,17 +1,31 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from 'vue'
-import { useRouter, withBase } from 'vitepress'
+import { useRouter, withBase, inBrowser } from 'vitepress'
 
-const canvas = ref(null)
+const canvas = ref<HTMLCanvasElement | null>(null)
 const score = ref(0)
-const best = ref(Number(localStorage.getItem('vp-dino-best') || 0))
-const state = ref('idle') // idle | playing | over
-let ctx, raf, last
+const best = ref(0) // 先给 0，不在 setup 读 localStorage
+const state = ref<'idle' | 'playing' | 'over'>('idle')
+
+let ctx: CanvasRenderingContext2D | null = null
+let raf = 0
+let last = 0
 const W = 640, H = 180, GROUND = 142
 const router = useRouter()
 const homePath = withBase('/')
 
-let dino, obs, clouds, speed, dist, vy, onGround, duck, night
+let dino: any, obs: any[] = [], clouds: any[] = []
+let speed = 5.2, dist = 0, vy = 0
+let onGround = true, duck = false, night = false
+
+function readBest() {
+  if (!inBrowser) return 0
+  try { return Number(localStorage.getItem('vp-dino-best') || 0) } catch { return 0 }
+}
+function writeBest(v: number) {
+  if (!inBrowser) return
+  try { localStorage.setItem('vp-dino-best', String(v)) } catch {}
+}
 
 function goHome() {
   router.go(homePath)
@@ -57,17 +71,17 @@ function spawn() {
   }
 }
 
-function hit(a, b) {
+function hit(a: any, b: any) {
   return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y
 }
 
-function update(dt) {
+function update(dt: number) {
   const k = Math.min(dt / 16.67, 2)
   dist += speed * k
   score.value = Math.floor(dist / 12)
   if (score.value > best.value) {
     best.value = score.value
-    localStorage.setItem('vp-dino-best', String(best.value))
+    writeBest(best.value) // 只在客户端写
   }
   night = score.value > 120 && Math.floor(score.value / 120) % 2 === 1
   speed = Math.min(5.2 + score.value / 90, 15)
@@ -86,9 +100,11 @@ function update(dt) {
     w: dino.w - 6,
     h: duck && onGround ? dino.h - 12 : dino.h
   }
-  for (const o of obs) if (hit(box, o)) {
-    state.value = 'over'
-    cancelAnimationFrame(raf)
+  for (const o of obs) {
+    if (hit(box, o)) {
+      state.value = 'over'
+      cancelAnimationFrame(raf)
+    }
   }
 
   for (const c of clouds) {
@@ -97,7 +113,11 @@ function update(dt) {
   }
 }
 
-function px(x, y, w, h, c) { ctx.fillStyle = c; ctx.fillRect(x, y, w, h) }
+function px(x: number, y: number, w: number, h: number, c: string) {
+  if (!ctx) return
+  ctx.fillStyle = c
+  ctx.fillRect(x, y, w, h)
+}
 
 function drawDino() {
   const x = dino.x, y = duck && onGround ? dino.y + 10 : dino.y
@@ -114,7 +134,7 @@ function drawDino() {
   if (duck && onGround) px(x, y + 2, 24, 8, body)
 }
 
-function drawObs(o) {
+function drawObs(o: any) {
   const c = night ? '#94a3b8' : '#0f766e'
   if (o.kind === 'cactus') {
     px(o.x, o.y, o.w, o.h, c)
@@ -127,7 +147,13 @@ function drawObs(o) {
   }
 }
 
+function getVar(n: string, f: string) {
+  if (!inBrowser) return f
+  return getComputedStyle(document.documentElement).getPropertyValue(n).trim() || f
+}
+
 function draw() {
+  if (!ctx) return
   const bg = night ? '#0b1220' : getVar('--vp-c-bg', '#ffffff')
   const line = night ? '#1e293b' : getVar('--vp-c-divider', '#e2e8f0')
   const sub = night ? '#64748b' : getVar('--vp-c-text-2', '#64748b')
@@ -155,36 +181,35 @@ function draw() {
   if (night) { ctx.fillStyle = sub; ctx.fillText('🌙', W - 70, 24) }
 }
 
-function loop(now) {
+function loop(now: number) {
   const dt = now - last; last = now
   if (state.value === 'playing') update(dt)
   draw()
   if (state.value === 'playing') raf = requestAnimationFrame(loop)
 }
 
-function getVar(n, f) {
-  if (typeof window === 'undefined') return f
-  return getComputedStyle(document.documentElement).getPropertyValue(n).trim() || f
-}
-
-function onKey(e) {
+function onKey(e: KeyboardEvent) {
   const k = e.key.toLowerCase()
   if ([' ', 'arrowup', 'arrowdown', 'w', 's'].includes(k)) e.preventDefault()
   if (k === 'r') { cancelAnimationFrame(raf); reset(); draw(); return }
   if (k === ' ' || k === 'arrowup' || k === 'w') jump()
   if (k === 'arrowdown' || k === 's') duck = true
 }
-function onKeyUp(e) {
+function onKeyUp(e: KeyboardEvent) {
   if (['arrowdown', 's'].includes(e.key.toLowerCase())) duck = false
 }
 function onPointer() { jump() }
 
 onMounted(() => {
+  if (!canvas.value) return
   ctx = canvas.value.getContext('2d')
-  reset(); draw()
+  best.value = readBest() // 客户端挂载后才读 localStorage
+  reset()
+  draw()
   window.addEventListener('keydown', onKey)
   window.addEventListener('keyup', onKeyUp)
 })
+
 onBeforeUnmount(() => {
   cancelAnimationFrame(raf)
   window.removeEventListener('keydown', onKey)
