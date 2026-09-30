@@ -1,5 +1,5 @@
 <template>
-  <div class="astronaut-wrap" aria-hidden="true">
+  <div class="astronaut-wrap space-layer" aria-hidden="true">
     <img
       class="astronaut"
       :class="{ 'is-ready': isReady }"

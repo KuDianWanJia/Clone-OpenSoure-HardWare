@@ -1,5 +1,5 @@
 <template>
-  <div class="meteor-rain" aria-hidden="true">
+  <div class="meteor-rain space-layer" aria-hidden="true">
     <span
       v-for="m in meteors"
       :key="m.id"

@@ -1,5 +1,5 @@
 <template>
-  <div class="space-bg" aria-hidden="true">
+  <div class="space-bg space-layer" aria-hidden="true">
     <!-- 星云层 -->
     <div class="nebula nebula-1"></div>
     <div class="nebula nebula-2"></div>

@@ -211,3 +211,11 @@
   position: relative;
   z-index: 1;
 }
+
+.space-layer {
+  display: none;
+}
+
+html.dark .space-layer {
+  display: block;
+}
