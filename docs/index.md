@@ -12,10 +12,10 @@ hero:
     alt: VitePress
   actions:
     - theme: brand
-      text: 开源硬件 💡
+      text: 开源硬件💡
       link: https://oshwhub.com/PQG2030PQG
     - theme: brand
-      text: 开源软件 💡
+      text: 开源软件💡
       link: https://gitee.com/KuDianWanJia
     - theme: brand
       text: 视频教程💻
