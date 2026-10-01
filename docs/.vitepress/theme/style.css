@@ -170,6 +170,63 @@
   }
 }
 
+/* Features 卡片：每张卡片独立主题色 --fc（渐变背景 + 悬停描边/光晕 + "原创"标签 同色联动） */
+.VPHomeFeatures .item:nth-child(1) .VPFeature { --fc: #16a34a; } /* 绿（贪吃蛇同款） */
+.VPHomeFeatures .item:nth-child(2) .VPFeature { --fc: #bd34fe; } /* 紫（Hero 渐变同款） */
+.VPHomeFeatures .item:nth-child(3) .VPFeature { --fc: #0ea5e9; } /* 天蓝 */
+.VPHomeFeatures .item:nth-child(4) .VPFeature { --fc: #f59e0b; } /* 琥珀 */
+.VPHomeFeatures .item:nth-child(5) .VPFeature { --fc: #fb7299; } /* 粉（Bilibili 品牌色） */
+.VPHomeFeatures .item:nth-child(6) .VPFeature { --fc: #ff4400; } /* 橙（淘宝品牌色） */
+
+.VPHomeFeatures .VPFeature {
+  --fc: #16a34a;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .25s, background-color .25s,
+    transform .16s ease, box-shadow .16s ease;
+}
+
+.VPHomeFeatures .VPFeature::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--fc) 18%, transparent), transparent);
+  pointer-events: none;
+}
+
+.VPHomeFeatures .VPFeature .box {
+  position: relative;
+}
+
+/* 右上角"原创"标签（颜色跟随卡片 --fc） */
+.VPHomeFeatures .VPFeature::after {
+  content: '原创';
+  position: absolute;
+  top: 12px; right: 12px;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--fc); color: #fff;
+}
+
+.VPHomeFeatures .VPFeature.link:hover {
+  border-color: var(--fc);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -12px color-mix(in srgb, var(--fc) 45%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .VPHomeFeatures .VPFeature {
+    transition: border-color .25s, background-color .25s;
+  }
+
+  .VPHomeFeatures .VPFeature.link:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
 /**
  * Component: Custom Block
  * -------------------------------------------------------------------------- */
