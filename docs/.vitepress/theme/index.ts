@@ -6,6 +6,7 @@ import DefaultTheme from 'vitepress/theme'
 import MeteorRain from './MeteorRain.vue'
 import Astronaut from './Astronaut.vue'
 import SpaceBackground from './SpaceBackground.vue'
+import SaturnPlanet from './SaturnPlanet.vue'
 import NotFoundDino from './NotFoundDino.vue'
 import NotFoundSnake from './NotFoundSnake.vue'
 import GameList from './GameList.vue'
@@ -28,7 +29,8 @@ export default {
       // 与亮色客户端渲染结构不一致导致 hydration mismatch（刷新后站内跳转白屏）。
       // 显隐仍由 style.css 中 html.dark .space-layer 控制。
       'home-hero-before': () => h(ClientOnly, null, {
-        default: () => [h(SpaceBackground), h(MeteorRain), h(Astronaut)]
+        // 土星背景替换原 CSS 天体（原天体保留在 SpaceBackground 中，默认 display:none）
+        default: () => [h(SpaceBackground), h(SaturnPlanet), h(MeteorRain), h(Astronaut)]
       }),
       /*
       // 文档页左侧导航栏

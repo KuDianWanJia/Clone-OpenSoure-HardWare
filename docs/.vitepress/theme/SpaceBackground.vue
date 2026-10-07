@@ -5,10 +5,10 @@
     <div class="nebula nebula-2"></div>
     <div class="nebula nebula-3"></div>
 
-    <!-- 天体 -->
-    <div class="planet planet-1"></div>
-    <div class="planet planet-2"></div>
-    <div class="planet planet-3"></div>
+    <!-- 天体 — 默认不加载，保留代码备用 -->
+    <div class="planet planet-1" style="display:none;"></div>
+    <div class="planet planet-2" style="display:none;"></div>
+    <div class="planet planet-3" style="display:none;"></div>
 
     <!-- 远处星点 -->
     <div class="stars">
