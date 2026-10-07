@@ -12,6 +12,7 @@ import GameList from './GameList.vue'
 import DinoGame from './games/DinoGame.vue'
 import SnakeGame from './games/SnakeGame.vue'
 import TetrisGame from './games/TetrisGame.vue'
+import RunnerGame from './games/RunnerGame.vue'
 import TokyoScene from './TokyoScene.vue'
 import HaruScene from './HaruScene.vue'
 import './style.css'
@@ -62,6 +63,7 @@ export default {
     app.component('DinoGame', DinoGame)
     app.component('SnakeGame', SnakeGame)
     app.component('TetrisGame', TetrisGame)
+    app.component('RunnerGame', RunnerGame)
     app.component('TokyoScene', TokyoScene)
     app.component('HaruScene', HaruScene)
   }

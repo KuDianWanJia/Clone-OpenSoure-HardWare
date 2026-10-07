@@ -22,6 +22,14 @@ const games = [
     tag: '可玩'
   },
   {
+    slug: 'runner',
+    name: '兔子快跑',
+    desc: '3D 星球跑酷：跳跃吃胡萝卜、躲刺猬，别被黑怪兽追上',
+    icon: '🐰',
+    color: '#dc5f45',
+    tag: '3D · 可玩'
+  },
+  {
     slug: 'tetris',
     name: '俄罗斯方块',
     desc: '开发中，先收藏一下',

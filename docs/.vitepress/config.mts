@@ -125,10 +125,13 @@ export default defineConfig({
             text: '东京街景 🏮', link: '/3D/tokyo/index.md'
           },
           {
-            text: 'Chrome 小恐龙🦖', link: '/games/dino.md'
+            text: '贪吃蛇🐍', link: '/games/snake.md'
           },
           {
-            text: '贪吃蛇🐍', link: '/games/snake.md'
+            text: '兔子快跑🐰', link: '/games/runner.md'
+          },
+          {
+            text: 'Chrome 小恐龙🦖', link: '/games/dino.md'
           },
           {
             text: '俄罗斯方块🧱', link: '/games/tetris.md'
