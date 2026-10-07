@@ -131,6 +131,9 @@ export default defineConfig({
             text: '兔子快跑🐰', link: '/games/runner.md'
           },
           {
+            text: '兔子吃萝卜🥕', link: '/games/rabbit.md'
+          },
+          {
             text: 'Chrome 小恐龙🦖', link: '/games/dino.md'
           },
           {

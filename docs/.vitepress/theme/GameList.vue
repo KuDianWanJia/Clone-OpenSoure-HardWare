@@ -30,6 +30,14 @@ const games = [
     tag: '3D · 可玩'
   },
   {
+    slug: 'rabbit',
+    name: '兔子吃萝卜',
+    desc: '3D 镜面地板：鼠标牵引兔子追胡萝卜，点击旋转跳跃',
+    icon: '🥕',
+    color: '#06b6d4',
+    tag: '3D · 可玩'
+  },
+  {
     slug: 'tetris',
     name: '俄罗斯方块',
     desc: '开发中，先收藏一下',
