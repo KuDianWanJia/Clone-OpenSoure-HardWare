@@ -119,6 +119,12 @@ export default defineConfig({
             text: '小游戏🎮', link: '/games/index.md'
           },
           {
+            text: '像素乐园 🌸', link: '/3D/haru/index.md'
+          },
+          {
+            text: '东京街景 🏮', link: '/3D/tokyo/index.md'
+          },
+          {
             text: 'Chrome 小恐龙🦖', link: '/games/dino.md'
           },
           {

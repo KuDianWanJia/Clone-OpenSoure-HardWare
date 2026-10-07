@@ -1,10 +1,12 @@
 {
   "devDependencies": {
+    "three": "^0.177.0",
     "vitepress": "^2.0.0-alpha.20"
   },
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "postinstall": "node -e \"require('fs').rmSync('docs/.vitepress/cache', { recursive: true, force: true })\""
   }
 }
