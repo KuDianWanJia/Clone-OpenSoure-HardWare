@@ -23,6 +23,38 @@ const sakuraPetals = [] // 樱花实例列表（{ mesh, vy, vx, rotSpeed }）
 const balloons = []     // 气球实例列表
 const floaters = []     // 所有漂浮物（气球等）统一更新
 
+// 只把粉色地面 mesh 染成指定颜色，不动地面上的任何物体
+function paintGround(root, colorHex) {
+  let target = null
+  root.traverse(o => {
+    if (o.isMesh && o.name === 'floor_10th') target = o
+  })
+  // 兜底：找不到指定名称时，取面积最大且厚度≈0 的平板
+  if (!target) {
+    root.updateMatrixWorld(true)
+    let best = null
+    let bestArea = 0
+    root.traverse(o => {
+      if (!o.isMesh) return
+      const box = new THREE.Box3().setFromObject(o)
+      const size = box.getSize(new THREE.Vector3())
+      const flatness = size.y / Math.max(size.x, size.z)
+      if (flatness > 0.02) return
+      const area = size.x * size.z
+      if (area > bestArea) { bestArea = area; best = o }
+    })
+    target = best
+  }
+  if (!target) return
+  const mats = Array.isArray(target.material) ? target.material : [target.material]
+  target.material = mats.map(m => {
+    const nm = m.clone()
+    nm.color = new THREE.Color(colorHex)
+    nm.map = null // 原色在调色板贴图里，纯色替换才能得到准确的黄
+    return nm
+  })
+}
+
 // 缩放并居中模型到目标最大尺寸
 function fitModel(model, targetSize) {
   const box = new THREE.Box3().setFromObject(model)
@@ -109,7 +141,8 @@ async function init() {
 
   scene = new THREE.Scene()
   camera = new THREE.PerspectiveCamera(45, w / h, 1, 8000)
-  camera.position.set(480, 360, 480)
+  // 整体视图大小(相机位置)
+  camera.position.set(200, 150, 200)
 
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -125,9 +158,11 @@ async function init() {
   controls.enablePan = false
   controls.minPolarAngle = Math.PI * 0.18
   controls.maxPolarAngle = Math.PI * 0.55
-  controls.minDistance = 320
-  controls.maxDistance = 2200
-  controls.target.set(0, -10, 0)
+  // 整体视图缩放范围
+  controls.minDistance = 160
+  controls.maxDistance = 1200
+  // 整体视图位置修改
+  controls.target.set(0, -60, 0)
 
   // 光照（物理光照单位，量级对齐官方示例）
   scene.add(new THREE.HemisphereLight(0xffffff, 0x88aacc, 2.8))
@@ -161,6 +196,8 @@ async function init() {
     const fit = fitModel(world, 600)
     const sceneScale = fit.scale
     const worldBottomY = fit.bottomY // 主场景地面 y 坐标
+    // 仅把粉色地面 floor_10th 染成 haru-ni 同款鹅黄色
+    paintGround(world, 0xe0c67b)
     scene.add(world)
     if (worldGltf.animations?.length) {
       const mixer = new THREE.AnimationMixer(world)
@@ -311,8 +348,10 @@ onBeforeUnmount(() => {
       <!-- 叠加文字层（不拦截画布拖拽） -->
       <div class="overlay">
         <span class="badge">✨ 沉浸式 3D 场景</span>
-        <h1 class="title-grad">像素乐园</h1>
-        <p class="sub">游乐园 · 樱花 · 气球 · 街角的伙伴</p>
+        <div class="titles">
+          <h1 class="title-grad">像素乐园</h1>
+          <p class="sub">游乐园 · 樱花 · 气球 · 街角的伙伴</p>
+        </div>
         <div class="btns">
           <a :href="withBase('/')" class="btn ghost">← 返回首页</a>
         </div>
@@ -340,9 +379,9 @@ onBeforeUnmount(() => {
   height: min(78vh, 760px);
   border-radius: 18px;
   overflow: hidden;
-  border: 1px solid var(--vp-c-divider);
-  background: linear-gradient(160deg, #fef3f6, #f0f0fa 55%, #e8ecf7);
-  box-shadow: 0 24px 60px -28px rgba(0, 0, 0, .3);
+  border: 1px solid #c9ab5e;
+  background: #e0c67b;
+  box-shadow: 0 24px 60px -28px rgba(120, 90, 20, .35);
 }
 
 .stage :deep(canvas) {
@@ -351,23 +390,30 @@ onBeforeUnmount(() => {
   height: 100% !important;
 }
 
+/* haru-ni 同款鹅黄色背景，暗色模式下保持一致 */
 .dark .stage {
-  background: radial-gradient(1200px 520px at 50% 0%, #2a2340, #12141d 70%);
-  border-color: #2b2f3d;
+  background: #e0c67b;
+  border-color: #c9ab5e;
 }
 
 .overlay {
   position: absolute;
   inset: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  text-align: center;
+  pointer-events: none;
+  padding: 20px 24px 0;
+  gap: 12px;
+}
+.titles {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  pointer-events: none;
-  padding: 0 24px;
 }
 .badge {
+  justify-self: start;
   font-size: 12.5px;
   font-weight: 600;
   padding: 4px 13px;
@@ -378,9 +424,9 @@ onBeforeUnmount(() => {
   box-shadow: 0 6px 18px -10px rgba(0, 0, 0, .35);
 }
 .title-grad {
-  font-size: clamp(40px, 7vw, 74px);
+  font-size: clamp(26px, 4vw, 44px);
   line-height: 1.1;
-  margin: 16px 0 12px;
+  margin: 0 0 4px;
   background: linear-gradient(315deg, #ff9ec7 25%, #bd34fe);
   -webkit-background-clip: text;
   background-clip: text;
@@ -389,17 +435,18 @@ onBeforeUnmount(() => {
   filter: drop-shadow(0 4px 18px rgba(255, 100, 180, .18));
 }
 .sub {
-  max-width: 560px;
+  max-width: 340px;
   color: var(--vp-c-text-1);
-  font-size: 15px;
+  font-size: 14px;
+  margin: 0;
   text-shadow: 0 1px 8px rgba(255, 255, 255, .5);
 }
 .dark .sub { text-shadow: 0 1px 8px rgba(0, 0, 0, .6); }
 
 .btns {
   display: flex;
+  justify-self: end;
   gap: 12px;
-  margin-top: 22px;
   pointer-events: auto;
 }
 .btn {
@@ -504,5 +551,10 @@ onBeforeUnmount(() => {
 @media (max-width: 768px) {
   .stage { height: 64vh; }
   .hints li:nth-child(3) { display: none; }
+  .overlay { padding: 12px 12px 0; gap: 8px; }
+  .title-grad { font-size: 22px; }
+  .sub { font-size: 12px; max-width: 170px; }
+  .badge { font-size: 11px; padding: 3px 9px; }
+  .btn { padding: 7px 13px; font-size: 12.5px; }
 }
 </style>

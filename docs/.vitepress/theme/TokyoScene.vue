@@ -85,7 +85,8 @@ async function init() {
 
   scene = new THREE.Scene()
   camera = new THREE.PerspectiveCamera(45, w / h, 1, 8000)
-  camera.position.set(520, 380, 520)
+  // 整体视图大小(相机位置)
+  camera.position.set(780, 600, 780)
 
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -101,9 +102,11 @@ async function init() {
   controls.enablePan = false
   controls.minPolarAngle = Math.PI * 0.2
   controls.maxPolarAngle = Math.PI * 0.52
-  controls.minDistance = 380
-  controls.maxDistance = 2400
-  controls.target.set(0, -10, 0)
+  // 整体视图缩放范围
+  controls.minDistance = 570
+  controls.maxDistance = 3600
+  // 整体视图位置修改
+  controls.target.set(0, -60, 0)
 
   // 光照量级对齐 three.js 官方 keyframes 示例（物理光照单位）
   const hemi = new THREE.HemisphereLight(0xffffff, 0x6688aa, 2.6)
@@ -210,8 +213,10 @@ onBeforeUnmount(() => {
       <!-- 叠加文字层（不拦截画布拖拽） -->
       <div class="overlay">
         <span class="badge">🏮 沉浸式 3D 场景</span>
-        <h1 class="title-grad">东京街景</h1>
-        <p class="sub">像素风小东京 · 拖拽旋转视角，电车与招财猫正在营业</p>
+        <div class="titles">
+          <h1 class="title-grad">东京街景</h1>
+          <p class="sub">像素风小东京 · 拖拽旋转视角，电车与招财猫正在营业</p>
+        </div>
         <div class="btns">
           <a :href="withBase('/')" class="btn ghost">← 返回首页</a>
         </div>
@@ -261,15 +266,21 @@ onBeforeUnmount(() => {
 .overlay {
   position: absolute;
   inset: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  text-align: center;
+  pointer-events: none;
+  padding: 20px 24px 0;
+  gap: 12px;
+}
+.titles {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  pointer-events: none;
-  padding: 0 24px;
 }
 .badge {
+  justify-self: start;
   font-size: 12.5px;
   font-weight: 600;
   padding: 4px 13px;
@@ -280,9 +291,9 @@ onBeforeUnmount(() => {
   box-shadow: 0 6px 18px -10px rgba(0, 0, 0, .35);
 }
 .title-grad {
-  font-size: clamp(40px, 7vw, 74px);
+  font-size: clamp(26px, 4vw, 44px);
   line-height: 1.1;
-  margin: 16px 0 12px;
+  margin: 0 0 4px;
   background: linear-gradient(315deg, #41d1ff 25%, #bd34fe);
   -webkit-background-clip: text;
   background-clip: text;
@@ -291,17 +302,18 @@ onBeforeUnmount(() => {
   filter: drop-shadow(0 4px 18px rgba(189, 52, 254, .18));
 }
 .sub {
-  max-width: 560px;
+  max-width: 340px;
   color: var(--vp-c-text-1);
-  font-size: 15px;
+  font-size: 14px;
+  margin: 0;
   text-shadow: 0 1px 8px rgba(255, 255, 255, .5);
 }
 .dark .sub { text-shadow: 0 1px 8px rgba(0, 0, 0, .6); }
 
 .btns {
   display: flex;
+  justify-self: end;
   gap: 12px;
-  margin-top: 22px;
   pointer-events: auto;
 }
 .btn {
@@ -407,5 +419,10 @@ onBeforeUnmount(() => {
 @media (max-width: 768px) {
   .stage { height: 64vh; }
   .hints li:nth-child(3) { display: none; }
+  .overlay { padding: 12px 12px 0; gap: 8px; }
+  .title-grad { font-size: 22px; }
+  .sub { font-size: 12px; max-width: 170px; }
+  .badge { font-size: 11px; padding: 3px 9px; }
+  .btn { padding: 7px 13px; font-size: 12.5px; }
 }
 </style>
