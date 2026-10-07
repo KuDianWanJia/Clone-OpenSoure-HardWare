@@ -26,20 +26,26 @@ export default {
       // 与亮色客户端渲染结构不一致导致 hydration mismatch（刷新后站内跳转白屏）。
       // 显隐仍由 style.css 中 html.dark .space-layer 控制。
       'home-hero-before': () => h(ClientOnly, null, {
-        default: () => [h(MeteorRain), h(SpaceBackground), h(Astronaut)]
+        default: () => [h(SpaceBackground), h(MeteorRain), h(Astronaut)]
       }),
+      /*
       // 文档页左侧导航栏
       'sidebar-nav-before': () => h(ClientOnly, null, {
         default: () => [h(Astronaut)]
       }),
       // 文档页正文 Markdown 渲染内容
-      'doc-before': () => h(ClientOnly, null, {
+      'layout-bottom': () => h(ClientOnly, null, {
         default: () => [h(Astronaut)]
       }),
       // 文档页右侧“目录/大纲”
       'aside-outline-before': () => h(ClientOnly, null, {
         default: () => [h(Astronaut)]
       }),
+      // 顶部导航栏
+      'nav-bar-title-before': () => h(ClientOnly, null, {
+        default: () => [h(Astronaut)]
+      }),
+      */
       // NotFound
       'not-found': () => h(ClientOnly, null, {
         default: () => [h(NotFoundDino)]
