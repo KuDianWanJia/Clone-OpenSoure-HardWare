@@ -38,6 +38,14 @@ const games = [
     tag: '3D · 可玩'
   },
   {
+    slug: 'cube',
+    name: '3D 魔方',
+    desc: '经典 The Cube：拖动转层复原六面，计时挑战 + 五种配色',
+    icon: '🧩',
+    color: '#f59e0b',
+    tag: '3D · 可玩'
+  },
+  {
     slug: 'tetris',
     name: '俄罗斯方块',
     desc: '开发中，先收藏一下',

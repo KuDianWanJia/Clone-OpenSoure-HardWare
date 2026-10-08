@@ -134,6 +134,9 @@ export default defineConfig({
             text: '兔子吃萝卜🥕', link: '/games/rabbit.md'
           },
           {
+            text: '3D 魔方🧩', link: '/games/cube.md'
+          },
+          {
             text: 'Chrome 小恐龙🦖', link: '/games/dino.md'
           },
           {
