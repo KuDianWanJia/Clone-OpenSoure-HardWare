@@ -6,6 +6,7 @@ import DefaultTheme from 'vitepress/theme'
 import MeteorRain from './MeteorRain.vue'
 import Astronaut from './Astronaut.vue'
 import SpaceBackground from './SpaceBackground.vue'
+import NeuralStars from './NeuralStars.vue'
 import SaturnPlanet from './SaturnPlanet.vue'
 import NotFoundDino from './NotFoundDino.vue'
 import NotFoundSnake from './NotFoundSnake.vue'
@@ -31,7 +32,8 @@ export default {
       // 显隐仍由 style.css 中 html.dark .space-layer 控制。
       'home-hero-before': () => h(ClientOnly, null, {
         // 土星背景替换原 CSS 天体（原天体保留在 SpaceBackground 中，默认 display:none）
-        default: () => [h(SpaceBackground), h(SaturnPlanet), h(MeteorRain), h(Astronaut)]
+        // NeuralStars：透明底 Three.js 星光特效叠在星云之上
+        default: () => [h(SpaceBackground), h(NeuralStars), h(SaturnPlanet), h(MeteorRain), h(Astronaut)]
       }),
       /*
       // 文档页左侧导航栏
@@ -61,6 +63,7 @@ export default {
     // ...
     // 注册组件（其实 Layout 里直接用也行，但注册更规范）
     app.component('SpaceBackground', SpaceBackground)
+    app.component('NeuralStars', NeuralStars)
     app.component('MeteorRain', MeteorRain)
     app.component('Astronaut', Astronaut)
     app.component('GameList', GameList)
