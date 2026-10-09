@@ -106,7 +106,7 @@ export default defineConfig({
           }
         ]
       },
-      { text: '支持我们 💰',
+      { text: '支持我们 😁',
         items: [
           {
             text: '支持我们', link: '/docs/donate.md'
