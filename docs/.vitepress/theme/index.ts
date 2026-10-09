@@ -8,6 +8,8 @@ import Astronaut from './Astronaut.vue'
 import SpaceBackground from './SpaceBackground.vue'
 import NeuralStars from './NeuralStars.vue'
 import SaturnPlanet from './SaturnPlanet.vue'
+import Singularity from './Singularity.vue'
+import Fireworks from './Fireworks.vue'
 import NotFoundDino from './NotFoundDino.vue'
 import NotFoundSnake from './NotFoundSnake.vue'
 import GameList from './GameList.vue'
@@ -33,7 +35,7 @@ export default {
       'home-hero-before': () => h(ClientOnly, null, {
         // 土星背景替换原 CSS 天体（原天体保留在 SpaceBackground 中，默认 display:none）
         // NeuralStars：透明底 Three.js 星光特效叠在星云之上
-        default: () => [h(SpaceBackground), h(NeuralStars), h(SaturnPlanet), h(MeteorRain), h(Astronaut)]
+        default: () => [h(SpaceBackground), h(Singularity), h(NeuralStars), h(SaturnPlanet), h(MeteorRain), h(Astronaut)]
       }),
       /*
       // 文档页左侧导航栏
@@ -53,6 +55,10 @@ export default {
         default: () => [h(Astronaut)]
       }),
       */
+      // 点击烟花：全页面固定层，pointer-events:none 不干扰交互
+      'layout-bottom': () => h(ClientOnly, null, {
+        default: () => h(Fireworks)
+      }),
       // NotFound
       'not-found': () => h(ClientOnly, null, {
         default: () => [h(NotFoundDino)]
@@ -75,5 +81,7 @@ export default {
     app.component('CubeGame', CubeGame)
     app.component('TokyoScene', TokyoScene)
     app.component('HaruScene', HaruScene)
+    app.component('Singularity', Singularity)
+    app.component('Fireworks', Fireworks)
   }
 } satisfies Theme
