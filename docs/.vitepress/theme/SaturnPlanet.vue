@@ -29,8 +29,8 @@ const getRandomColor = () => Colors[colorKeys[Math.floor(Math.random() * colorKe
 // 三个天体的配置：不同颜色 / 大小 / 位置（fx/fy 为画布内百分比坐标）
 const saturnConfigs = [
   { color: Colors.orange, scale: 0.65, fx: 0.25, fy: 0.30, particles: 180, rotSpeed: 0.018, tilt: [0.60, -0.50] },
-  { color: Colors.blue,   scale: 0.45, fx: 0.84, fy: 0.62, particles: 160, rotSpeed: 0.014, tilt: [-0.15, 0.30] },
-  { color: Colors.green,  scale: 0.35, fx: 0.52, fy: 0.62, particles: 120, rotSpeed: 0.018, tilt: [0.35, -0.20] }
+  { color: Colors.yellow, scale: 0.45, fx: 0.80, fy: 0.15, particles: 160, rotSpeed: 0.014, tilt: [0.8, -0.10] },
+  { color: Colors.green,  scale: 0.35, fx: 0.65, fy: 0.60, particles: 120, rotSpeed: 0.018, tilt: [0.35, -0.20] }
 ]
 
 // 行星参数（对应原 pen 的 GUI 默认值）
