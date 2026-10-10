@@ -2003,25 +2003,12 @@ export function bootCube() {
       (this.loadPreferences(), this.loadScores());
     }
     loadGame() {
-      try {
-        const e = "true" === localStorage.getItem("theCube_playing");
-        if (!e) throw new Error();
-        const t = JSON.parse(localStorage.getItem("theCube_savedState")),
-          a = parseInt(localStorage.getItem("theCube_time"));
-        if (!t || null === a) throw new Error();
-        if (t.size !== this.game.cube.sizeGenerated) throw new Error();
-        if (!this.isSavedStateValid(t)) {
-          // 坏档（典型：旧版序列化 Euler 的 _x/_y/_z，或任何非有限数）必须丢弃，
-          // 否则每次刷新都会 loadFromData 恢复出污染矩阵，魔方永久不显示。
-          this.clearGame();
-          throw new Error("invalid saved state");
-        }
-        (this.game.cube.loadFromData(t),
-          (this.game.timer.deltaTime = a),
-          (this.game.saved = !0));
-      } catch (t) {
-        this.game.saved = !1;
-      }
+      // 刷新/SPA 往返一律重置：彻底丢弃 localStorage 中的存档，
+      // 避免坏档（Euler 下划线字段、NaN 经 JSON→null、positions 长度不匹配等）
+      // 被恢复出来导致魔方缺块/矩阵污染/永久不显示。
+      // 存档相关方法（saveGame / clearGame / isSavedStateValid）保留但变成死代码。
+      this.clearGame();
+      this.game.saved = !1;
     }
     isSavedStateValid(d) {
       if (!d || !Array.isArray(d.positions) || !Array.isArray(d.rotations)) return false;

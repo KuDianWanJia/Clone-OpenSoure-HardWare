@@ -5,7 +5,7 @@
 // 这里用 v-html 注入原始标记，绕过 Vue 模板编译；内容为静态字符串，挂载后不再参与 diff。
 import { onMounted, onBeforeUnmount } from 'vue'
 import { withBase } from 'vitepress'
-import { bootCube, stopCube } from './cube-engine?v=cube9'
+import { bootCube, stopCube } from './cube-engine?v=cube10'
 import './cube.css'
 
 const uiHtml = `
